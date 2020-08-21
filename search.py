@@ -21,6 +21,13 @@ grid = [[0, 0, 1, 0, 0, 0],
         [0, 0, 0, 0, 1, 0],
         [0, 0, 1, 1, 1, 0],
         [0, 0, 0, 0, 1, 0]]
+
+grid = [[0, 1, 1, 1, 1],
+        [0, 1, 0, 0, 0],
+        [0, 0, 0, 1, 0],
+        [1, 1, 1, 1, 0],
+        [0, 0, 0, 1, 0]]
+
 init = [0, 0]
 goal = [len(grid)-1, len(grid[0])-1]
 cost = 1
@@ -75,4 +82,38 @@ def search(grid,init,goal,cost):
     path=[last[1],last[0][0],last[0][1]]           
     return path
 
-search(grid,init,goal,cost)
+## Providing the extended path that the robot took on grid
+def search2(grid,init,goal,cost):
+    # ----------------------------------------
+    # modify code below
+    # ----------------------------------------
+    expand=[[0 for  row in range(len(grid[0]))] for col in range(len(grid))]
+    closed=[[0 for  row in range(len(grid[0]))] for col in range(len(grid))]
+    g=0
+    path=0
+    expand[init[0]][init[1]]=path
+    closed[init[0]][init[1]]=1
+    opened=[[g,init[0],init[1]]]
+    while ((len(opened)!=0 and opened[0][1:]!=goal)):
+        #opened.sort()
+        active=opened.pop(0)
+        for i in range(len(delta)):
+            x2=active[1]+delta[i][0]
+            y2=active[2]+delta[i][1]
+            g=active[0]
+            if ((len(grid)>x2>=0) and (len(grid[0])>y2>=0)):
+                if grid[x2][y2]==1:
+                    expand[x2][y2]=-1
+                if (closed[x2][y2]==0 and grid[x2][y2]==0):
+                    g2=g+cost
+                    opened.append([g2,x2,y2])
+                    closed[x2][y2]=1
+                    path+=1
+                    expand[x2][y2]=path
+        opened.sort()
+    #expand = None
+    return expand
+
+exp=search2(grid,init,goal,cost)
+for i in range(len(exp)):
+    print (exp[i])
