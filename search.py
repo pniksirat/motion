@@ -15,14 +15,19 @@
 #   0 = Navigable space
 #   1 = Occupied space
 
-
 grid = [[0, 0, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 1, 0],
+        [0, 0, 1, 0, 1, 0],
+        [0, 0, 1, 0, 1, 0]]
+
+grid3 = [[0, 0, 1, 0, 0, 0],
         [0, 0, 1, 0, 0, 0],
         [0, 0, 0, 0, 1, 0],
         [0, 0, 1, 1, 1, 0],
         [0, 0, 0, 0, 1, 0]]
 
-grid = [[0, 1, 1, 1, 1],
+grid2 = [[0, 1, 1, 1, 1],
         [0, 1, 0, 0, 0],
         [0, 0, 0, 1, 0],
         [1, 1, 1, 1, 0],
@@ -40,7 +45,7 @@ delta = [[-1, 0], # go up
 delta_name = ['^', '<', 'v', '>']
 
 
-
+#cost of each cell g-value
 def search(grid,init,goal,cost):
     # ----------------------------------------
     # insert code here
@@ -49,6 +54,7 @@ def search(grid,init,goal,cost):
          [ 0,-1], # go left
          [ 1, 0], # go down
          [ 0, 1]] # go right
+    cost=[[0 for  row in range(len(grid[0]))] for col in range(len(grid))]
     opened=[]
     closed=[]
     opened=[[init,0]]
@@ -75,13 +81,15 @@ def search(grid,init,goal,cost):
                     if grid[m][n]==0:
                         g+=1
                         opened.append([[m,n],g])
+                        cost[m][n]=g
             closed.append(opened.pop(0))          
                 
-                    
+    for i in range(len(cost)):
+        print (cost[i])              
     last=opened[0] 
     path=[last[1],last[0][0],last[0][1]]           
     return path
-
+#################################################################################
 ## Providing the extended path that the robot took on grid
 def search2(grid,init,goal,cost):
     # ----------------------------------------
@@ -114,6 +122,11 @@ def search2(grid,init,goal,cost):
     #expand = None
     return expand
 
+"""
 exp=search2(grid,init,goal,cost)
 for i in range(len(exp)):
     print (exp[i])
+
+"""
+exp=search(grid,init,goal,cost)
+print (exp)
